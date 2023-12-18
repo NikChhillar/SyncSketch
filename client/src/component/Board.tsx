@@ -1,5 +1,6 @@
 import React, { useRef, useEffect, useState } from 'react';
 import io from 'socket.io-client';
+import { Socket } from 'socket.io-client';
 
 interface MyBoard {
     brushColor: string;
@@ -11,7 +12,7 @@ const Board: React.FC<MyBoard> = (props) => {
     const { brushColor, brushSize } = props;
     const canvasRef = useRef<HTMLCanvasElement>(null);
 
-    const [socket, setSocket] = useState(null);
+    const [socket, setSocket] = useState<Socket | null>(null);
 
     useEffect(() => {
         const newSocket = io('http://localhost:5000');
@@ -24,17 +25,17 @@ const Board: React.FC<MyBoard> = (props) => {
 
         if (socket) {
             // Event listener for receiving canvas data from the socket
-            socket.on('canvasImage', (data) => {
+            socket.on('canvasImage', (data: string) => {
                 // Create an image object from the data URL
                 const image = new Image();
                 image.src = data;
 
                 const canvas = canvasRef.current;
                 // eslint-disable-next-line react-hooks/exhaustive-deps
-                const ctx = canvas.getContext('2d');
+                const ctx = canvas?.getContext('2d');
                 // Draw the image onto the canvas
                 image.onload = () => {
-                    ctx.drawImage(image, 0, 0);
+                    ctx?.drawImage(image, 0, 0);
                 };
             });
         }
@@ -60,7 +61,7 @@ const Board: React.FC<MyBoard> = (props) => {
             if (!isDrawing) return;
 
             const canvas = canvasRef.current;
-            const ctx = canvas.getContext('2d');
+            const ctx = canvas?.getContext('2d');
             if (ctx) {
                 ctx.beginPath();
                 ctx.moveTo(lastX, lastY);
@@ -74,7 +75,7 @@ const Board: React.FC<MyBoard> = (props) => {
         // Function to end drawing
         const endDrawing = () => {
             const canvas = canvasRef.current;
-            const dataURL = canvas.toDataURL(); // Get the data URL of the canvas content
+            const dataURL = canvas?.toDataURL(); // Get the data URL of the canvas content
 
             // Send the dataURL or image data to the socket
             // console.log('drawing ended')
@@ -98,17 +99,17 @@ const Board: React.FC<MyBoard> = (props) => {
 
         }
         // Event listeners for drawing
-        canvas.addEventListener('mousedown', startDrawing);
-        canvas.addEventListener('mousemove', draw);
-        canvas.addEventListener('mouseup', endDrawing);
-        canvas.addEventListener('mouseout', endDrawing);
+        canvas?.addEventListener('mousedown', startDrawing);
+        canvas?.addEventListener('mousemove', draw);
+        canvas?.addEventListener('mouseup', endDrawing);
+        canvas?.addEventListener('mouseout', endDrawing);
 
         return () => {
             // Clean up event listeners when component unmounts
-            canvas.removeEventListener('mousedown', startDrawing);
-            canvas.removeEventListener('mousemove', draw);
-            canvas.removeEventListener('mouseup', endDrawing);
-            canvas.removeEventListener('mouseout', endDrawing);
+            canvas?.removeEventListener('mousedown', startDrawing);
+            canvas?.removeEventListener('mousemove', draw);
+            canvas?.removeEventListener('mouseup', endDrawing);
+            canvas?.removeEventListener('mouseout', endDrawing);
         };
     }, [brushColor, brushSize, socket]);
 
