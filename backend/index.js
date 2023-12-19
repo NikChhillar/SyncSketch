@@ -1,7 +1,7 @@
 
 const { Server } = require('socket.io');
 const io = new Server({
-    cors: "http://localhost:5173/"
+    cors: "https://sync-sketch.vercel.app/"
 })
 io.on('connection', function (socket) {
 
