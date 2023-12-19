@@ -35,7 +35,7 @@ node index.js
 
 ## Getting Started
 
-1. Clone the repository: `git clone https://github.com/your-username/SyncSketch.git`
+1. Clone the repository: `git clone https://github.com/NikChhillar/SyncSketch.git`
 2. Follow the installation instructions for both the frontend and backend.
 3. Start collaborating! Open the app in your browser and invite team members to join your collaborative whiteboard session.
 
