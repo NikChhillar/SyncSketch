@@ -15,7 +15,8 @@ const Board: React.FC<MyBoard> = (props) => {
     const [socket, setSocket] = useState<Socket | null>(null);
 
     useEffect(() => {
-        const newSocket = io('http://localhost:5000');
+        // const newSocket = io('http://localhost:5000');
+        const newSocket = io('https://sketchsync-backend.onrender.com/');
         console.log(newSocket, "Connected to socket");
         setSocket(newSocket);
     }, []);
