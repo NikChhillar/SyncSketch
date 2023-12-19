@@ -39,6 +39,10 @@ node index.js
 2. Follow the installation instructions for both the frontend and backend.
 3. Start collaborating! Open the app in your browser and invite team members to join your collaborative whiteboard session.
 
+## Deployment
+- Frontend: The frontend is deployed on Vercel.
+- Backend: The backend is deployed on Render.
+
 ## Contributing
 
 We welcome contributions! If you have ideas for new features, improvements, or bug fixes, feel free to open an issue or submit a pull request.
