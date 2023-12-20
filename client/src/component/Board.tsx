@@ -57,6 +57,17 @@ const Board: React.FC<MyBoard> = (props) => {
             [lastX, lastY] = [e.offsetX, e.offsetY];
         };
 
+        /**
+        const startDrawingTouch = (e: React.TouchEvent<HTMLCanvasElement>) => {
+            e.preventDefault(); // Prevent default behavior for touch events
+            isDrawing = true;
+
+            const { clientX, clientY } = e.touches[0];
+            console.log(`drawing started`, brushColor, brushSize);
+            [lastX, lastY] = [clientX, clientY];
+        };
+         */
+
         // Function to draw
         const draw = (e: { offsetX: number; offsetY: number; }) => {
             if (!isDrawing) return;
@@ -73,6 +84,26 @@ const Board: React.FC<MyBoard> = (props) => {
             [lastX, lastY] = [e.offsetX, e.offsetY];
         };
 
+        /**
+        const drawTouch = (e: React.TouchEvent<HTMLCanvasElement>) => {
+            e.preventDefault(); // Prevent default behavior for touch events
+            if (!isDrawing) return;
+
+            const { clientX, clientY } = e.touches[0];
+            const canvas = canvasRef.current;
+            const ctx = canvas?.getContext('2d');
+
+            if (ctx) {
+                ctx.beginPath();
+                ctx.moveTo(lastX, lastY);
+                ctx.lineTo(clientX, clientY);
+                ctx.stroke();
+            }
+
+            [lastX, lastY] = [clientX, clientY];
+        };
+         */
+
         // Function to end drawing
         const endDrawing = () => {
             const canvas = canvasRef.current;
@@ -85,6 +116,32 @@ const Board: React.FC<MyBoard> = (props) => {
                 console.log('drawing ended')
             }
             isDrawing = false;
+        };
+
+        const handleTouchStart = (e: TouchEvent) => {
+            isDrawing = true;
+
+            console.log(`drawing started`, brushColor, brushSize);
+
+            const { clientX, clientY } = e.touches[0];
+            [lastX, lastY] = [clientX, clientY];
+        };
+
+        const handleTouchMove = (e: TouchEvent) => {
+            if (!isDrawing) return;
+
+            const canvas = canvasRef.current;
+            const ctx = canvas?.getContext('2d');
+            if (ctx) {
+                const { clientX, clientY } = e.touches[0];
+
+                ctx.beginPath();
+                ctx.moveTo(lastX, lastY);
+                ctx.lineTo(clientX, clientY);
+                ctx.stroke();
+
+                [lastX, lastY] = [clientX, clientY];
+            }
         };
 
         const canvas: HTMLCanvasElement | null = canvasRef.current;
@@ -105,12 +162,26 @@ const Board: React.FC<MyBoard> = (props) => {
         canvas?.addEventListener('mouseup', endDrawing);
         canvas?.addEventListener('mouseout', endDrawing);
 
+
+        // canvas?.addEventListener('touchstart', startDrawingTouch, { passive: false });
+        canvas?.addEventListener('touchstart', handleTouchStart);
+        canvas?.addEventListener('touchmove', handleTouchMove);
+        canvas?.addEventListener('touchend', endDrawing);
+
+
+
+
+
         return () => {
             // Clean up event listeners when component unmounts
             canvas?.removeEventListener('mousedown', startDrawing);
             canvas?.removeEventListener('mousemove', draw);
             canvas?.removeEventListener('mouseup', endDrawing);
             canvas?.removeEventListener('mouseout', endDrawing);
+
+            canvas?.removeEventListener('touchstart', handleTouchStart);
+            canvas?.removeEventListener('touchmove', handleTouchMove);
+            canvas?.removeEventListener('touchend', endDrawing);
         };
     }, [brushColor, brushSize, socket]);
 
