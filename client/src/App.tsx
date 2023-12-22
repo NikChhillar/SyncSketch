@@ -13,7 +13,7 @@ const CanvasDrawing = () => {
 
   return (
     <div className="App" >
-      <h1>Collaborative Whiteboard</h1>
+    
       <div>
         <Board brushColor={brushColor} brushSize={brushSize} />
         <div className='tools' >

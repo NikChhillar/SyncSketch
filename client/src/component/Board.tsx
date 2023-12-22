@@ -207,8 +207,8 @@ const Board: React.FC<MyBoard> = (props) => {
     return (
         <canvas
             ref={canvasRef}
-            width={windowSize[0] > 600 ? 600 : 300}
-            height={windowSize[1] > 400 ? 400 : 200}
+            width={windowSize[0] - 100}
+            height={windowSize[1] - 100}
             style={{ backgroundColor: 'white' }}
         />
     );
